@@ -1,4 +1,5 @@
 import 'package:agneya/screens/courses/courses.dart';
+import 'package:agneya/screens/papers/papers.dart';
 import 'package:agneya/screens/root/root.dart';
 import 'package:agneya/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,15 @@ class AllView extends StatelessWidget {
                   );
                 },
                 child: const Text('Courses Page')),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PapersPage(),
+                    ),
+                  );
+                },
+                child: const Text('Papers Page')),
           ],
         ),
       ),

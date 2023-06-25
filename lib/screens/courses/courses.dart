@@ -43,56 +43,62 @@ class _CoursesPageState extends State<CoursesPage> {
               ),
             ),
             SliverList(
-              delegate: SliverChildListDelegate([
-                FutureBuilder(
-                  future: CoursesApi.getCourses(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      default:
-                        if (snapshot.hasError) {
+              delegate: SliverChildListDelegate(
+                [
+                  FutureBuilder(
+                    future: CoursesApi.getCourses(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
                           return const Center(
-                            child: Text("Some error has occured"),
+                            child: CircularProgressIndicator(),
                           );
-                        } else {
-                          final List courses = snapshot.data as List;
+                        default:
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text("Some error has occured"),
+                            );
+                          } else {
+                            final List courses = snapshot.data as List;
 
-                          return ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: courses.length,
-                            separatorBuilder: (context, index) {
-                              return Divider(
-                                color: Colors.grey.withOpacity(0.1),
-                              );
-                            },
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                leading: Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: courses.length,
+                              separatorBuilder: (context, index) {
+                                return Divider(
+                                  color: Colors.grey.withOpacity(0.1),
+                                );
+                              },
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  leading: Container(
+                                    height: 55,
+                                    width: 55,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.grey,
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              courses[index].thumbnailUrl),
+                                          fit: BoxFit.contain),
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
                                     color: Colors.grey.withOpacity(0.2),
                                   ),
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.grey.withOpacity(0.2),
-                                ),
-                                title: Text(courses[index].courseName),
-                                titleTextStyle: GoogleFonts.nunitoSans(),
-                              );
-                            },
-                          );
-                        }
-                    }
-                  },
-                )
-              ]),
+                                  title: Text(courses[index].courseName),
+                                  titleTextStyle: GoogleFonts.nunitoSans(),
+                                );
+                              },
+                            );
+                          }
+                      }
+                    },
+                  )
+                ],
+              ),
             ),
           ],
         ),

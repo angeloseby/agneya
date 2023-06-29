@@ -1,19 +1,25 @@
-import 'package:agneya/screens/courses/connection/courses_api.dart';
-import 'package:agneya/screens/semesters/semester.dart';
+import 'package:agneya/screens/papers/papers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CoursesPage extends StatefulWidget {
-  const CoursesPage({super.key, required this.url});
+import 'connections/semesters_api.dart';
 
-  final String url;
+class SemesterPage extends StatefulWidget {
+  const SemesterPage(
+      {super.key,
+      required this.imgUrl,
+      required this.courseCode,
+      required this.courseName});
+  final String courseCode;
+  final String imgUrl;
+  final String courseName;
 
   @override
-  State<CoursesPage> createState() => _CoursesPageState();
+  State<SemesterPage> createState() => _SemesterPageState();
 }
 
-class _CoursesPageState extends State<CoursesPage> {
+class _SemesterPageState extends State<SemesterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +29,11 @@ class _CoursesPageState extends State<CoursesPage> {
           slivers: [
             SliverPersistentHeader(
               pinned: true,
-              delegate: CoursesAppBarDelegate(),
+              delegate: CoursesAppBarDelegate(
+                courseName: widget.courseName,
+                imgUrl: widget.imgUrl,
+                courseCode: widget.courseCode,
+              ),
             ),
             SliverList(
               delegate: SliverChildListDelegate.fixed(
@@ -32,7 +42,7 @@ class _CoursesPageState extends State<CoursesPage> {
                     padding:
                         const EdgeInsets.only(left: 16, top: 16, bottom: 16),
                     child: Text(
-                      "Courses",
+                      "Semesters",
                       style: GoogleFonts.nunitoSans(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
@@ -47,7 +57,7 @@ class _CoursesPageState extends State<CoursesPage> {
               delegate: SliverChildListDelegate(
                 [
                   FutureBuilder(
-                    future: CoursesApi.getCourses(),
+                    future: SemestersApi.getSemesters(widget.courseCode),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
@@ -57,56 +67,77 @@ class _CoursesPageState extends State<CoursesPage> {
                         default:
                           if (snapshot.hasError) {
                             return const Center(
-                              child: Text("Some error has occured"),
+                              child: Text("Some error has occurred"),
                             );
                           } else {
-                            final List courses = snapshot.data as List;
+                            final int sems = snapshot.data;
 
-                            return ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: courses.length,
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  color: Colors.grey.withOpacity(0.1),
-                                );
-                              },
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => SemesterPage(
-                                          courseName: courses[index].courseName,
-                                            imgUrl: courses[index].thumbnailUrl,
-                                            courseCode:
-                                                courses[index].courseCode),
+                            return Container(
+                              margin: const EdgeInsets.all(15),
+                              height: MediaQuery.of(context).size.height * 0.50,
+                              child: GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 15,
+                                    mainAxisSpacing: 15,
+                                    childAspectRatio: 3.8 / 4,
+                                  ),
+                                  itemCount: sems,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => PapersPage(
+                                              courseName: widget.courseName,
+                                              semNo: index + 1,
+                                              courseCode: widget.courseCode,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF36373B),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(15),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "Semester ${index + 1} Papers",
+                                                  maxLines: 3,
+                                                  style: GoogleFonts.nunitoSans(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: Image.network(
+                                                  'https://raw.githubusercontent.com/agneya2022/agneya/main/qp.png',
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
-                                  },
-                                  leading: Hero(
-                                    tag: courses[index].courseCode,
-                                    child: Container(
-                                      height: 55,
-                                      width: 55,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey,
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                courses[index].thumbnailUrl),
-                                            fit: BoxFit.contain),
-                                      ),
-                                    ),
-                                  ),
-                                  trailing: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.grey.withOpacity(0.2),
-                                  ),
-                                  title: Text(courses[index].courseName),
-                                  titleTextStyle: GoogleFonts.nunitoSans(),
-                                );
-                              },
+                                  }),
                             );
                           }
                       }
@@ -125,6 +156,14 @@ class _CoursesPageState extends State<CoursesPage> {
 // This custom delegate is responsible for the stretchy animated AppBar.
 
 class CoursesAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final String courseName;
+  final String imgUrl;
+  final String courseCode;
+
+  CoursesAppBarDelegate(
+      {required this.courseName,
+      required this.imgUrl,
+      required this.courseCode});
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -144,9 +183,9 @@ class CoursesAppBarDelegate extends SliverPersistentHeaderDelegate {
             duration: const Duration(milliseconds: 150),
             opacity: 1 - progress,
             child: Hero(
-              tag: 'qp',
+              tag: courseCode,
               child: Image.network(
-                'https://raw.githubusercontent.com/agneya2022/agneya/main/exam.png',
+                imgUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -187,7 +226,7 @@ class CoursesAppBarDelegate extends SliverPersistentHeaderDelegate {
               progress,
             ),
             child: Text(
-              'Question Papers',
+              courseName,
               style: TextStyle.lerp(
                 GoogleFonts.nunitoSans(
                   fontSize: 28,

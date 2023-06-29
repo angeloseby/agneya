@@ -1,7 +1,18 @@
-import 'package:agneya/allview.dart';
+import 'package:agneya/screens/root/root.dart';
+import 'package:agneya/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late bool isFirstTime;
+
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  isFirstTime = sharedPref.getBool('firstTime') ?? true;
+  if (isFirstTime == true){
+    sharedPref.setBool('firstTime', false);
+    print(isFirstTime.toString()); //To remove on release
+  }
   runApp(const MyApp());
 }
 
@@ -22,7 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AllView(),
+      home:  isFirstTime?const WelcomePage():const RootPage(),
     );
   }
 }

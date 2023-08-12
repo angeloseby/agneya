@@ -1,3 +1,4 @@
+import 'package:agneya/screens/college_updates/college_updates.dart';
 import 'package:agneya/screens/courses/courses.dart';
 import 'package:agneya/screens/home/widgets/resources_card.dart';
 import 'package:agneya/screens/home/widgets/scroll.dart';
@@ -95,13 +96,18 @@ class HomePage extends StatelessWidget {
                         'https://raw.githubusercontent.com/agneya2022/agneya/main/notes.jpg',
                   ),
                 ),
-                ResourcesCard(
-                  tag: 'cu',
-                  screenSize: screenSize,
-                  title: "College Updates",
-                  subTitle: "HAPPENINGS IN BMC",
-                  imgUrl:
-                      'https://raw.githubusercontent.com/agneya2022/agneya/main/bmc.jpg',
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const CollegeUpdatesPage()));
+                  },
+                  child: ResourcesCard(
+                    tag: 'cu',
+                    screenSize: screenSize,
+                    title: "College Updates",
+                    subTitle: "HAPPENINGS IN BMC",
+                    imgUrl:
+                        'https://raw.githubusercontent.com/agneya2022/agneya/main/bmc.jpg',
+                  ),
                 ),
                 ResourcesCard(
                   tag: 'pd',

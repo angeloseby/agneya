@@ -17,10 +17,8 @@ class _MagazinePageState extends State<MagazinePage> {
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-          },
-          onPageStarted: (String url) {
-          },
+          onProgress: (int progress) {},
+          onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
@@ -31,11 +29,14 @@ class _MagazinePageState extends State<MagazinePage> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://online.fliphtml5.com/vnefl/hqui/'));
+      ..loadRequest(Uri.parse('https://linktr.ee/agneya.bmc'));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kiranam",style: GoogleFonts.nunitoSans(),),
+        title: Text(
+          "Kiranam",
+          style: GoogleFonts.nunitoSans(),
+        ),
         centerTitle: true,
       ),
       body: SafeArea(child: WebViewWidget(controller: controller)),

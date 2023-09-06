@@ -1,12 +1,12 @@
-import 'package:agneya/screens/college_updates/college_update_model.dart';
+import 'package:agneya/screens/placement_desk/placement_desk_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'college_updates_api.dart';
+import 'placement_desk_api.dart';
 
-class CollegeUpdatesPage extends StatelessWidget {
-  const CollegeUpdatesPage({super.key});
+class PlacementDeskPage extends StatelessWidget {
+  const PlacementDeskPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CollegeUpdatesPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future: CollegeUpdateApi.getCollegeUpdates(),
+          future: PlacementDeskApi.getCollegeUpdates(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -38,7 +38,7 @@ class CollegeUpdatesPage extends StatelessWidget {
                 child: Text("Some error has occurred"),
               );
             } else {
-              final List<CollegeUpdate> collegeUpdates = snapshot.data ?? [];
+              final List<PlacementDesk> collegeUpdates = snapshot.data ?? [];
               return ListView.separated(
                   separatorBuilder: (context, index) {
                     return const SizedBox(

@@ -7,6 +7,9 @@ import 'package:agneya/screens/study_notes/study_notes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../placement_desk/placement_desk.dart';
+import '../university_updates/university_updates.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -59,7 +62,7 @@ class HomePage extends StatelessWidget {
                     title: "Kiranam",
                     subTitle: "COLLEGE MAGAZINE",
                     imgUrl:
-                        'https://raw.githubusercontent.com/agneya2022/agneya/main/mag_cover.png',
+                        'https://raw.githubusercontent.com/agneya2022/agneya/main/mag_cover_com.png',
                   ),
                 ),
                 GestureDetector(
@@ -97,8 +100,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const CollegeUpdatesPage()));
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const CollegeUpdatesPage()));
                   },
                   child: ResourcesCard(
                     tag: 'cu',
@@ -109,21 +113,33 @@ class HomePage extends StatelessWidget {
                         'https://raw.githubusercontent.com/agneya2022/agneya/main/bmc.jpg',
                   ),
                 ),
-                ResourcesCard(
-                  tag: 'pd',
-                  screenSize: screenSize,
-                  title: "Placement Desk",
-                  subTitle: "UPDATES FROM PLACEMENT CELL",
-                  imgUrl:
-                      'https://raw.githubusercontent.com/agneya2022/agneya/main/tpo.jpeg',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const PlacementDeskPage()));
+                  },
+                  child: ResourcesCard(
+                    tag: 'pd',
+                    screenSize: screenSize,
+                    title: "Placement Desk",
+                    subTitle: "UPDATES FROM PLACEMENT CELL",
+                    imgUrl:
+                        'https://raw.githubusercontent.com/agneya2022/agneya/main/tpo.jpeg',
+                  ),
                 ),
-                ResourcesCard(
-                  tag: 'uu',
-                  screenSize: screenSize,
-                  title: "University Updates",
-                  subTitle: "UPDATES FROM MGU",
-                  imgUrl:
-                      'https://raw.githubusercontent.com/agneya2022/agneya/main/mgu.png',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const UniversityUpdatesPage()));
+                  },
+                  child: ResourcesCard(
+                    tag: 'uu',
+                    screenSize: screenSize,
+                    title: "University Updates",
+                    subTitle: "UPDATES FROM MGU",
+                    imgUrl:
+                        'https://raw.githubusercontent.com/agneya2022/agneya/main/mgu.png',
+                  ),
                 ),
               ],
             ),
